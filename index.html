@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Types Search Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/typeahead.js/dist/typeahead.bundle.js"></script>
+    <script src="search.js"></script>
+    <script>
+    	$(function() {
+    		typeSearch(document.getElementById('demo'));
+    	});
+    </script>
+  </head>
+  <body>
+    <h2>Types Search Demo</h2>
+    <input id="demo" class="typeahead" />
+  </body>
+</html>

@@ -1,33 +1,49 @@
-/// <reference path="node_modules/@ryancavanaugh/fuse/fuse.d.ts" />
-/// <reference path="../publish-typings/src/searchRecord.d.ts" />
+/// <reference path="typings/tsd.d.ts" />
 
-declare var require: any;
-declare var process: { argv: string[] };
+const bh = new Bloodhound(<any>{
+	datumTokenizer: (entry: any): string[] => {
+		return [entry.libraryName, entry.projectName, entry.typePackageName].concat(entry.globals);
+	},
+	queryTokenizer: (input: string) => {
+		return [input];
+	},
+	identify: (e: any) => e.typePackageName,
+	prefetch: {
+		url: '/search-index-full.json',
+		ttl: 0
+	},
+	sorter: (x: any, y: any) => {
+		// TODO: Include edit distance as additional weighting factor
+		return y.downloads - x.downloads;
+	}
+});
 
-import fuse = require('fuse.js');
-const fs = require('fs');
+bh.clearPrefetchCache();
+bh.initialize();
+/*
+$.getJSON('/search-index-full.json', data => {
+	bh.add(data);
+});
+*/
 
-interface FuseRecord {
-	item: SearchRecord;
-	score: number;
+function typeSearch(el: HTMLInputElement) {
+	const opts: Twitter.Typeahead.Options = {
+		highlight: true,
+		minLength: 1
+	};
+	const data = {
+		source: bh,
+		displayKey: 'typePackageName',
+		templates: {
+			suggestion: (obj: any) => {
+				return `<div class="suggestion">
+						<span class="type-package-name">${obj.typePackageName}</span>
+						<span class="library-name">${obj.libraryName}</span>
+						</div>`
+			}
+		}
+	};
+
+	$(el).typeahead(opts, data);
 }
-
-const data: SearchRecord[] = JSON.parse(fs.readFileSync('../publish-typings/search-with-downloads.json', 'utf-8'));
-
-function customSort(left: FuseRecord, right: FuseRecord) {
-	return Math.log(right.item.downloads) * (1 - right.score) - Math.log(left.item.downloads) * (1 - left.score);
-}
-
-function normalSort(left: FuseRecord, right: FuseRecord) {
-	return left.score - right.score;
-}
-
-// const f = new fuse(data, <any>{ keys: ["libraryName", "packageName", "npmPackageName", "declaredExternalModules", "globals"], include: ['score'] });
-const f = new fuse(data, <any>{ keys: ["globals"], include: ['score'] });
-const results: FuseRecord[] = f.search(process.argv[process.argv.length - 1]).slice(0, 10);
-results.sort(customSort);
-// results.sort(normalSort);
-results.reverse();
-console.log(JSON.stringify(results.map(r => `${r.item.typePackageName}`), undefined, 4));
-
 

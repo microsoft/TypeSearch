@@ -1,0 +1,101 @@
+
+div.suggestion {
+    border: solid 1px gray;
+
+}
+
+input#demo {
+    width: 18em;
+}
+
+.twitter-typehead {
+    position: relative;
+}
+
+.tt-hint, .tt-input, .tt-menu { width: 100%; }
+
+span.type-package-name {
+    font-family: monospace;
+}
+
+span.library-name {
+    float: right;
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 750px;
+    text-align: center;
+}
+.tt-dropdown-menu, .gist {
+    text-align: left;
+}
+html {
+    color: #333333;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.2;
+}
+.title, .example-name {
+    font-family: Prociono;
+}
+p {
+    margin: 0 0 10px;
+}
+.title {
+    font-size: 64px;
+    margin: 20px 0 0;
+}
+.example {
+    padding: 30px 0;
+}
+.example-name {
+    font-size: 32px;
+    margin: 20px 0;
+}
+.demo {
+    margin: 50px 0;
+    position: relative;
+}
+.typeahead, .tt-query, .tt-hint {
+    border: 2px solid #CCCCCC;
+    border-radius: 8px 8px 8px 8px;
+    font-size: 24px;
+    height: 30px;
+    line-height: 30px;
+    outline: medium none;
+    padding: 8px 12px;
+    position: relative;
+}
+.typeahead {
+    background-color: #FFFFFF;
+}
+.typeahead:focus {
+    border: 2px solid #0097CF;
+}
+.tt-query {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+.tt-hint {
+    color: #999999;
+}
+.tt-dropdown-menu {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 12px;
+    padding: 8px 0;
+}
+.tt-suggestion {
+    font-size: 18px;
+    line-height: 24px;
+    padding: 3px 20px;
+}
+.tt-suggestion.tt-cursor {
+    background-color: #0097CF;
+    color: #FFFFFF;
+}
+.tt-suggestion p {
+    margin: 0;
+}

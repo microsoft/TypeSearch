@@ -1,0 +1,12 @@
+{
+  "version": "v4",
+  "repo": "borisyankov/DefinitelyTyped",
+  "ref": "master",
+  "path": "typings",
+  "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "handlebars/handlebars.d.ts": {
+      "commit": "e8f8e7471b8ca92ca417f8c878f64ae4d1067972"
+    }
+  }
+}
