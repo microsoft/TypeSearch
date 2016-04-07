@@ -10,7 +10,9 @@
     <script src="bin/search.js"></script>
     <script>
     	$(function() {
-    		typeSearch(document.getElementById('demo'));
+            var el = document.getElementById('demo');
+    		typeSearch(el);
+            $(el).focus();
     	});
     </script>
   </head>
