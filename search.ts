@@ -64,7 +64,7 @@ function typeSearch(el: HTMLInputElement) {
 			if (!fetching) {
 				fetching = true;
 
-				$.getJSON('/search-index-min.json', data => {
+				$.getJSON('search-index-min.json', data => {
 					window.localStorage.setItem(localStorageOriginKey, Date.now().toString());
 					window.localStorage.setItem(localStorageDataKey, JSON.stringify(data));
 					source.add(data);
@@ -87,7 +87,7 @@ function typeSearch(el: HTMLInputElement) {
 			},
 			identify: (e: MinifiedSearchRecord) => <any>e.t,
 			prefetch: {
-				url: '/search-index-head.json',
+				url: 'search-index-head.json',
 				ttl: dataTimeout
 			},
 			sorter: (x: MinifiedSearchRecord, y: MinifiedSearchRecord) => {

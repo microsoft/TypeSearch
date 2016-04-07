@@ -35,7 +35,7 @@ function typeSearch(el) {
         if (Date.now() > lastFetch + dataTimeout) {
             if (!fetching) {
                 fetching = true;
-                $.getJSON('/search-index-min.json', function (data) {
+                $.getJSON('search-index-min.json', function (data) {
                     window.localStorage.setItem(localStorageOriginKey, Date.now().toString());
                     window.localStorage.setItem(localStorageDataKey, JSON.stringify(data));
                     source.add(data);
@@ -55,7 +55,7 @@ function typeSearch(el) {
             },
             identify: function (e) { return e.t; },
             prefetch: {
-                url: '/search-index-head.json',
+                url: 'search-index-head.json',
                 ttl: dataTimeout
             },
             sorter: function (x, y) {
