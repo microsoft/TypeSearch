@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Types Search Demo</title>
+    <title>TypeScript Types Search</title>
+    <link rel="stylesheet" href="demo.css">
     <link rel="stylesheet" href="style.css">
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/typeahead.js/dist/typeahead.bundle.js"></script>
-    <script src="search.js"></script>
+    <script src="bin/search.js"></script>
     <script>
     	$(function() {
     		typeSearch(document.getElementById('demo'));
@@ -14,7 +15,12 @@
     </script>
   </head>
   <body>
-    <h2>Types Search Demo</h2>
-    <input id="demo" class="typeahead" />
+    <h1><span class="typescript">Types Search</span></h1>
+    <div style="{ width: 36em; }">
+    	<input id="demo" class="typeahead" placeholder="Search for Types Packages" value="angular" style={ width: 100% } />
+    	<div id="output" />
+    </div>
+
+    <div class="footer">Powered by <a href="https://github.com/DefinitelyTyped/DefinitelyTyped">DefinitelyTyped</a> and <a href="https://github.com/RyanCavanaugh/publish-typings">publish-typings</a></div>
   </body>
 </html>
