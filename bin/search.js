@@ -1,4 +1,5 @@
 /// <reference path="typings/tsd.d.ts" />
+var ai = window['appInsights'];
 var localStorageDataKey = 'typesearch-data';
 var localStorageOriginKey = 'typeseach-data-origin';
 var dataTimeout = 1000 * 60 * 60 * 24; // 1 day
@@ -26,7 +27,13 @@ function typeSearch(el) {
         }
     });
     jqueryEl.focus(fetchFull);
+    jqueryEl.focus(function () {
+        ai.trackEvent('focus');
+    });
     function navigate(value) {
+        if (ai) {
+            ai.trackEvent('navigate', { target: value });
+        }
         window.location.href = "https://www.npmjs.org/package/@ryancavanaugh/" + value;
     }
     var fetching = false;

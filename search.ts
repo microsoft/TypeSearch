@@ -1,5 +1,7 @@
 /// <reference path="typings/tsd.d.ts" />
 
+const ai = (<any>window)['appInsights']
+
 const localStorageDataKey = 'typesearch-data';
 const localStorageOriginKey = 'typeseach-data-origin';
 
@@ -51,8 +53,14 @@ function typeSearch(el: HTMLInputElement) {
 	});
 
 	jqueryEl.focus(fetchFull);
+	jqueryEl.focus(() => {
+		ai.trackEvent('focus');
+	});
 
 	function navigate(value: string) {
+		if (ai) {
+			ai.trackEvent('navigate', { target: value });
+		}
 		window.location.href = `https://www.npmjs.org/package/@ryancavanaugh/${value}`;
 	}
 
@@ -101,4 +109,3 @@ function typeSearch(el: HTMLInputElement) {
 	}
 
 }
-
