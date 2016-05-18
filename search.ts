@@ -61,7 +61,7 @@ function typeSearch(el: HTMLInputElement) {
 		if (ai) {
 			ai.trackEvent('navigate', { target: value });
 		}
-		window.location.href = `https://www.npmjs.org/package/@ryancavanaugh/${value}`;
+		window.location.href = `https://www.npmjs.org/package/@types/${value}`;
 	}
 
 	let fetching = false;
