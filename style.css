@@ -1,3 +1,15 @@
+body {
+    font-family: wf_segoe-ui_normal,Verdana,Geneva,Tahoma,sans-serif;;
+}
+
+h1 {
+    font-weight: 100;
+}
+
+span.bold {
+    font-weight: 500;
+}
+
 div.suggestion {
     border: solid 1px gray;
     cursor: pointer;

@@ -34,7 +34,7 @@ function typeSearch(el) {
         if (ai) {
             ai.trackEvent('navigate', { target: value });
         }
-        window.location.href = "https://www.npmjs.org/package/@ryancavanaugh/" + value;
+        window.location.href = "https://www.npmjs.org/package/@types/" + value;
     }
     var fetching = false;
     function fetchFull() {
