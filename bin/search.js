@@ -35,8 +35,8 @@ function typeSearch(el) {
             ai.trackEvent('navigate', { target: value });
         }
         // Navigate only if the selected string is a valid package, else return.
-        var result = $.grep(source.local, function(e) { return e.t === value; });
-        if (result.length === 0) {
+        const result = source.local.some(e => e.t === value); 
+        if (!result) {
             return;
         }
         window.location.href = "https://www.npmjs.org/package/@types/" + value;
@@ -56,8 +56,8 @@ function typeSearch(el) {
             }
         }
     }
-    var query = "";
     function createDataSource() {
+        var query = "";
         var local = JSON.parse(window.localStorage.getItem(localStorageDataKey)) || undefined;
         var bh = new Bloodhound({
             datumTokenizer: function (entry) {
@@ -75,10 +75,10 @@ function typeSearch(el) {
             sorter: function (x, y) {
                 // TODO: Include edit distance as additional weighting factor
                 // Direct matches should be ranked higher, else rank on basis of download count
-                if (x.t === query || x.t === (query + "js") || x.t === (query + ".js")) {
+                if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
                     return -1;
                 }
-                else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js")) {
+                else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
                     return 1;
                 }
                 else {
