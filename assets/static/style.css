@@ -1,0 +1,92 @@
+body {
+    font-family: wf_segoe-ui_normal,Verdana,Geneva,Tahoma,sans-serif;;
+}
+
+h1 {
+    font-weight: 100;
+}
+
+span.bold {
+    font-weight: 500;
+}
+
+div.suggestion {
+    border: solid 1px gray;
+    cursor: pointer;
+}
+
+.twitter-typehead {
+    position: relative;
+}
+
+.tt-hint, .tt-input, .tt-menu { width: 100%; }
+
+span.type-package-name {
+    font-family: monospace;
+    text-align: left;
+    left: 5%;
+    right: 35%;
+}
+
+span.type-package-name, span.library-name {
+    display: block;
+    position: absolute;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: all;
+}
+
+span.library-name {
+    display: block;
+    left: 60%;
+    right: 2%;
+    text-align: right;
+}
+
+.tt-dropdown-menu, .gist {
+    text-align: left;
+}
+.typeahead, .tt-query, .tt-hint {
+    border: 2px solid #CCCCCC;
+    border-radius: 8px 8px 8px 8px;
+    font-size: 24px;
+    height: 30px;
+    line-height: 30px;
+    outline: medium none;
+    padding: 8px 12px;
+    position: relative;
+}
+.typeahead {
+    background-color: #FFFFFF;
+}
+.typeahead:focus {
+    border: 2px solid #0097CF;
+}
+.tt-query {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+.tt-hint {
+    color: #999999;
+}
+.tt-dropdown-menu {
+    background-color: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    margin-top: 12px;
+    padding: 8px 0;
+}
+.tt-suggestion {
+    font-size: 18px;
+    line-height: 24px;
+    padding: 3px 20px;
+    height: 24px;
+}
+.tt-suggestion.tt-cursor {
+    background-color: #0097CF;
+    color: #FFFFFF;
+}
+.tt-suggestion p {
+    margin: 0;
+}
