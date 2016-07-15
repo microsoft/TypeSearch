@@ -1,9 +1,7 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        "types": [
-            "../../node_modules/@types/jquery",
-            "../../node_modules/@types/typeahead"
-        ]
+        "typeRoots": ["../../node_modules"],
+        "types": ["jquery", "typeahead"]
     }
 }

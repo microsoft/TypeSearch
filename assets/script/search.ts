@@ -1,4 +1,7 @@
-const ai = (<any>window)['appInsights']
+interface Window {
+	appInsights: any;
+}
+const ai = window.appInsights;
 
 const localStorageDataKey = 'typesearch-data';
 const localStorageOriginKey = 'typeseach-data-origin';

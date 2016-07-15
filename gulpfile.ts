@@ -1,6 +1,9 @@
+/// <reference path="./declarations.d.ts"/>
+
 import del = require("del");
 import * as gulp from "gulp";
-const httpServer = require("http-server");
+import {createServer} from "http-server";
+//const httpServer = require("http-server");
 import * as path from "path";
 import ts = require("gulp-typescript");
 
@@ -13,8 +16,7 @@ gulp.task("script", ["clean"], () => {
     const tsProject = ts.createProject("assets/script/tsconfig.json", {
         typescript: require("typescript")
     });
-    const tsResult = tsProject.src().pipe(ts(tsProject));
-    return tsResult.js.pipe(gulp.dest(outDir("script")));
+    return tsProject.src().pipe(ts(tsProject)).js.pipe(gulp.dest(outDir("script")));
 });
 
 function copy(src: string, dest: string): NodeJS.ReadWriteStream {
@@ -28,7 +30,7 @@ gulp.task("index", ["clean"], () => copy("search-index-@(full|head|min).json", o
 gulp.task("build", ["clean", "script", "static", "lib", "index"]);
 
 gulp.task("serve", () => {
-    const server = httpServer.createServer({ root: "public" });
+    const server = createServer({ root: "public" });
     console.log("\nServing to localhost\n");
     server.listen(80);
 });
