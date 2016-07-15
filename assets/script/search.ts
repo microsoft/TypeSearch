@@ -23,6 +23,10 @@ interface MinifiedSearchRecord {
 	d: number;
 }
 
+interface Bloodhound<T> {
+	local: T[];
+}
+
 function typeSearch(el: HTMLInputElement) {
 	const jqueryEl = $(el);
 	const opts: Twitter.Typeahead.Options = {
@@ -62,6 +66,11 @@ function typeSearch(el: HTMLInputElement) {
 		if (ai) {
 			ai.trackEvent('navigate', { target: value });
 		}
+		// Navigate only if the selected string is a valid package, else return.
+		const result = source.local.some((e: MinifiedSearchRecord) => e.t === value);
+		if (!result) {
+			return;
+		}
 		window.location.href = `https://www.npmjs.org/package/@types/${value}`;
 	}
 
@@ -83,7 +92,8 @@ function typeSearch(el: HTMLInputElement) {
 		}
 	}
 
-	function createDataSource() {
+	function createDataSource(): Bloodhound<MinifiedSearchRecord> {
+		let query = "";
 		const local = JSON.parse(window.localStorage.getItem(localStorageDataKey)) || undefined;
 
 		const bh = new Bloodhound({
@@ -92,6 +102,7 @@ function typeSearch(el: HTMLInputElement) {
 				return [entry.l, entry.p, entry.t].concat(entry.g).concat(entry.m);
 			},
 			queryTokenizer: (input: string) => {
+				query = input;
 				return [input];
 			},
 			identify: (e: MinifiedSearchRecord) => <any>e.t,
@@ -101,7 +112,16 @@ function typeSearch(el: HTMLInputElement) {
 			},
 			sorter: (x: MinifiedSearchRecord, y: MinifiedSearchRecord) => {
 				// TODO: Include edit distance as additional weighting factor
-				return y.d - x.d;
+				// Direct matches should be ranked higher, else rank on basis of download count
+                if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
+                    return -1;
+                }
+                else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
+                    return 1;
+                }
+                else {
+                    return y.d - x.d;
+                }
 			},
 			local
 		});
