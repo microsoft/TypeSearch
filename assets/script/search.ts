@@ -3,6 +3,9 @@ interface Window {
 }
 const ai = window.appInsights;
 
+const searchIndexMinUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-head.json";
+const searchIndexHeadUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-head.json";
+
 const localStorageDataKey = 'typesearch-data';
 const localStorageOriginKey = 'typeseach-data-origin';
 
@@ -73,7 +76,7 @@ function typeSearch(el: HTMLInputElement) {
 			if (!fetching) {
 				fetching = true;
 
-				$.getJSON('search-index-min.json', data => {
+				$.getJSON(searchIndexMinUrl, data => {
 					window.localStorage.setItem(localStorageOriginKey, Date.now().toString());
 					window.localStorage.setItem(localStorageDataKey, JSON.stringify(data));
 					source.add(data);
@@ -96,7 +99,7 @@ function typeSearch(el: HTMLInputElement) {
 			},
 			identify: (e: MinifiedSearchRecord) => <any>e.t,
 			prefetch: {
-				url: 'search-index-head.json',
+				url: searchIndexHeadUrl,
 				ttl: dataTimeout
 			},
 			sorter: (x: MinifiedSearchRecord, y: MinifiedSearchRecord) => {
