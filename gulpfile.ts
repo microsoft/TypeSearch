@@ -5,6 +5,7 @@ import del = require("del");
 import * as fse from "fs-extra";
 import * as gulp from "gulp";
 import {createServer} from "http-server";
+import merge = require("merge-stream");
 import * as path from "path";
 import * as tmp from "tmp";
 import ts = require("gulp-typescript");
@@ -26,7 +27,9 @@ function copy(src: string, dest: string): NodeJS.ReadWriteStream {
 }
 
 gulp.task("static", ["clean"], () => copy("assets/static/**", out));
-gulp.task("lib", ["clean"], () => copy("node_modules/@(jquery|typeahead.js)/**", outDir("lib")));
+gulp.task("lib", ["clean"], () =>
+    merge(...["jquery/dist/jquery.min.js", "typeahead.js/dist/typeahead.bundle.min.js"].map(src =>
+        copy(`node_modules/${src}`, outDir("lib")))));
 gulp.task("index", ["clean"], () => copy("search-index-@(full|head|min).json", out));
 
 gulp.task("build", ["clean", "script", "static", "lib", "index"]);
