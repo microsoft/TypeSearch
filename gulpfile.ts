@@ -1,10 +1,14 @@
 /// <reference path="./declarations.d.ts"/>
+/// <reference types="es6-promise" />
 
+import {execSync} from "child_process";
 import del = require("del");
+import * as fse from "fs-extra";
 import * as gulp from "gulp";
 import {createServer} from "http-server";
 //const httpServer = require("http-server");
 import * as path from "path";
+import * as tmp from "tmp";
 import ts = require("gulp-typescript");
 
 const out = "public";
@@ -38,3 +42,62 @@ gulp.task("serve", () => {
 gulp.task("watch", ["build", "serve"], () => gulp.watch("assets/**", ["build"]));
 
 gulp.task("default", ["watch"]);
+
+gulp.task("publish", ["build"], () => {
+    function exec(cmd: string): string {
+        return execSync(cmd, { encoding: "utf8" });
+    }
+
+    if (!(exec("git status").includes("nothing to commit"))) {
+        throw new Error("Commit all changes first!")
+    }
+
+    if (exec("git rev-parse --abbrev-ref HEAD").trim() !== "master") {
+        throw new Error("You are not on master branch.");
+    }
+
+    const tmpObj = tmp.dirSync();
+    console.log(`Temporaries are stored at ${tmpObj.name}`);
+    function tmpDir(dir: string): string {
+        return path.join(tmpObj.name, dir);
+    }
+
+    const toMove = ["node_modules", "public"];
+    // Move files away temporarily.
+    const moved = Promise.all(toMove.map(dir => mvPromise(dir, tmpDir(dir))));
+
+    moved.then(() => {
+        exec("git checkout gh-pages");
+        // Clean out the old
+        const oldFiles = fse.readdirSync(".").filter(f => f !== ".git");
+        oldFiles.forEach(fse.removeSync);
+        // Move in the new
+        fse.copySync(tmpDir("public"), ".");
+
+        // And commit it
+        exec("git add --all");
+        exec("git commit -m \"Update from master\"");
+        exec("git push");
+
+        exec("git checkout master");
+        // Move files back.
+        return Promise.all(toMove.map(dir => mvPromise(tmpDir(dir), dir)));
+    }).catch(console.error);
+});
+
+declare module "fs-extra" {
+    function move(src: string, dest: string, cb: (err: Error | undefined) => void): void;
+}
+
+function mvPromise(src: string, dest: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+        fse.move(src, dest, err => {
+            if (err) {
+                reject(err);
+            }
+            else {
+                resolve();
+            }
+        })
+    });
+}
