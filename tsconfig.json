@@ -1,13 +1,7 @@
+// This is used only for compiling gulpfile.ts
 {
-	"files": ["search.ts"],
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es5",
         "noImplicitAny": true,
-        "sourceMap": false,
-        "outDir": "bin"
-    },
-    "exclude": [
-        "node_modules"
-    ]
+        "target": "es6"
+    }
 }

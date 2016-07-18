@@ -1,6 +1,8 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
+        "sourceMap": false,
+        "target": "es5",
         "typeRoots": ["../../node_modules"],
         "types": ["jquery", "typeahead"]
     }

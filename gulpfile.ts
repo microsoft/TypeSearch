@@ -1,5 +1,4 @@
 /// <reference path="./declarations.d.ts"/>
-/// <reference types="es6-promise" />
 
 import {execSync} from "child_process";
 import del = require("del");
@@ -42,7 +41,7 @@ gulp.task("watch", ["build", "serve"], () => gulp.watch("assets/**", ["build"]))
 
 gulp.task("default", ["watch"]);
 
-gulp.task("publish", ["build"], () => {
+gulp.task("publish", ["build"], async () => {
     function exec(cmd: string): string {
         return execSync(cmd, { encoding: "utf8" });
     }
@@ -63,25 +62,23 @@ gulp.task("publish", ["build"], () => {
 
     const toMove = ["node_modules", "public"];
     // Move files away temporarily.
-    const moved = Promise.all(toMove.map(dir => mvPromise(dir, tmpDir(dir))));
+    await Promise.all(toMove.map(dir => mvPromise(dir, tmpDir(dir))));
 
-    return moved.then(() => {
-        exec("git checkout gh-pages");
-        // Clean out the old
-        const oldFiles = fse.readdirSync(".").filter(f => f !== ".git");
-        oldFiles.forEach(fse.removeSync);
-        // Move in the new
-        fse.copySync(tmpDir("public"), ".");
+    exec("git checkout gh-pages");
+    // Clean out the old
+    const oldFiles = fse.readdirSync(".").filter(f => f !== ".git");
+    oldFiles.forEach(fse.removeSync);
+    // Move in the new
+    fse.copySync(tmpDir("public"), ".");
 
-        // And commit it
-        exec("git add --all");
-        exec("git commit -m \"Update from master\"");
-        exec("git push");
+    // And commit it
+    exec("git add --all");
+    exec("git commit -m \"Update from master\"");
+    exec("git push");
 
-        exec("git checkout master");
-        // Move files back.
-        return Promise.all(toMove.map(dir => mvPromise(tmpDir(dir), dir)));
-    });
+    exec("git checkout master");
+    // Move files back.
+    await Promise.all(toMove.map(dir => mvPromise(tmpDir(dir), dir)));
 });
 
 declare module "fs-extra" {
