@@ -6,7 +6,6 @@ import del = require("del");
 import * as fse from "fs-extra";
 import * as gulp from "gulp";
 import {createServer} from "http-server";
-//const httpServer = require("http-server");
 import * as path from "path";
 import * as tmp from "tmp";
 import ts = require("gulp-typescript");
@@ -66,7 +65,7 @@ gulp.task("publish", ["build"], () => {
     // Move files away temporarily.
     const moved = Promise.all(toMove.map(dir => mvPromise(dir, tmpDir(dir))));
 
-    moved.then(() => {
+    return moved.then(() => {
         exec("git checkout gh-pages");
         // Clean out the old
         const oldFiles = fse.readdirSync(".").filter(f => f !== ".git");
@@ -82,7 +81,7 @@ gulp.task("publish", ["build"], () => {
         exec("git checkout master");
         // Move files back.
         return Promise.all(toMove.map(dir => mvPromise(tmpDir(dir), dir)));
-    }).catch(console.error);
+    });
 });
 
 declare module "fs-extra" {
