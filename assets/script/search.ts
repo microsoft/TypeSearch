@@ -3,7 +3,7 @@ interface Window {
 }
 const ai = window.appInsights;
 
-const searchIndexMinUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-head.json";
+const searchIndexMinUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
 const searchIndexHeadUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-head.json";
 
 const localStorageDataKey = 'typesearch-data';
