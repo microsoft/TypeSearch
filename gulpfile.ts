@@ -30,9 +30,8 @@ gulp.task("static", ["clean"], () => copy("assets/static/**", out));
 gulp.task("lib", ["clean"], () =>
     merge(...["jquery/dist/jquery.min.js", "typeahead.js/dist/typeahead.bundle.min.js"].map(src =>
         copy(`node_modules/${src}`, outDir("lib")))));
-gulp.task("index", ["clean"], () => copy("search-index-@(full|head|min).json", out));
 
-gulp.task("build", ["clean", "script", "static", "lib", "index"]);
+gulp.task("build", ["clean", "script", "static", "lib"]);
 
 gulp.task("serve", () => {
     const server = createServer({ root: "public" });
