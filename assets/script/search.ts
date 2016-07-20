@@ -94,34 +94,34 @@ function typeSearch(el: HTMLInputElement) {
 
 	function createDataSource(): Bloodhound<MinifiedSearchRecord> {
 		let query = "";
-		const local = JSON.parse(window.localStorage.getItem(localStorageDataKey)) || undefined;
+		const local: MinifiedSearchRecord[] | undefined = JSON.parse(window.localStorage.getItem(localStorageDataKey)) || undefined;
 
 		const bh = new Bloodhound({
 
-			datumTokenizer: (entry: MinifiedSearchRecord): string[] => {
+			datumTokenizer: (entry): string[] => {
 				return [entry.l, entry.p, entry.t].concat(entry.g).concat(entry.m);
 			},
 			queryTokenizer: (input: string) => {
 				query = input;
 				return [input];
 			},
-			identify: (e: MinifiedSearchRecord) => <any>e.t,
+			identify: e => <any>e.t,
 			prefetch: {
 				url: 'search-index-head.json',
 				ttl: dataTimeout
 			},
-			sorter: (x: MinifiedSearchRecord, y: MinifiedSearchRecord) => {
+			sorter: (x, y) => {
 				// TODO: Include edit distance as additional weighting factor
 				// Direct matches should be ranked higher, else rank on basis of download count
-                if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
-                    return -1;
-                }
-                else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
-                    return 1;
-                }
-                else {
-                    return y.d - x.d;
-                }
+				if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
+					return -1;
+				}
+				else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
+					return 1;
+				}
+				else {
+					return y.d - x.d;
+				}
 			},
 			local
 		});
