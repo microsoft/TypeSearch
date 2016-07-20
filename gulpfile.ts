@@ -7,6 +7,7 @@ import * as gulp from "gulp";
 import {createServer} from "http-server";
 import merge = require("merge-stream");
 import * as path from "path";
+import runSequence = require("run-sequence");
 import * as tmp from "tmp";
 import ts = require("gulp-typescript");
 
@@ -15,7 +16,7 @@ function outDir(name: string): string { return path.join(out, name); }
 
 gulp.task("clean", () => del(`${out}/*`));
 
-gulp.task("script", ["clean"], () => {
+gulp.task("script", () => {
     const tsProject = ts.createProject("assets/script/tsconfig.json", {
         typescript: require("typescript")
     });
@@ -26,12 +27,14 @@ function copy(src: string, dest: string): NodeJS.ReadWriteStream {
     return gulp.src(src).pipe(gulp.dest(dest));
 }
 
-gulp.task("static", ["clean"], () => copy("assets/static/**", out));
-gulp.task("lib", ["clean"], () =>
+gulp.task("static", () => copy("assets/static/**", out));
+gulp.task("lib", () =>
     merge(...["jquery/dist/jquery.min.js", "typeahead.js/dist/typeahead.bundle.min.js"].map(src =>
         copy(`node_modules/${src}`, outDir("lib")))));
 
-gulp.task("build", ["clean", "script", "static", "lib"]);
+gulp.task("build", (cb: any) => {
+    runSequence("clean", ["script", "static", "lib"], cb);
+});
 
 gulp.task("serve", () => {
     const server = createServer({ root: "public" });
@@ -39,7 +42,12 @@ gulp.task("serve", () => {
     server.listen(80);
 });
 
-gulp.task("watch", ["build", "serve"], () => gulp.watch("assets/**", ["build"]));
+gulp.task("watch", ["build", "serve"], () => {
+    gulp.watch("assets/script/**", ["script"]);
+    gulp.watch("assets/static/**", ["static"]);
+    gulp.watch("node_modules", ["lib"]);
+    gulp.watch("search-index-@(full|head|min).json", ["index"]);
+});
 
 gulp.task("default", ["watch"]);
 
