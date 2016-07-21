@@ -3,13 +3,7 @@ interface Window {
 }
 const ai = window.appInsights;
 
-const searchIndexMinUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
-const searchIndexHeadUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-head.json";
-
-const localStorageDataKey = 'typesearch-data';
-const localStorageOriginKey = 'typeseach-data-origin';
-
-const dataTimeout = 1000 * 60 * 60 * 24; // 1 day
+const searchIndexUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
 
 interface MinifiedSearchRecord {
 	// types package name
@@ -60,7 +54,6 @@ function typeSearch(el: HTMLInputElement) {
 		}
 	});
 
-	jqueryEl.focus(fetchFull);
 	jqueryEl.focus(() => {
 		ai.trackEvent('focus');
 	});
@@ -77,42 +70,19 @@ function typeSearch(el: HTMLInputElement) {
 		window.location.href = `https://www.npmjs.org/package/@types/${value}`;
 	}
 
-	let fetching = false;
-	function fetchFull() {
-		const lastFetch = +window.localStorage.getItem(localStorageOriginKey);
-
-		if (Date.now() > lastFetch + dataTimeout) {
-			if (!fetching) {
-				fetching = true;
-
-				$.getJSON(searchIndexMinUrl, data => {
-					window.localStorage.setItem(localStorageOriginKey, Date.now().toString());
-					window.localStorage.setItem(localStorageDataKey, JSON.stringify(data));
-					source.add(data);
-					fetching = false;
-				});
-			}
-		}
-	}
-
 	function createDataSource(): Bloodhound<MinifiedSearchRecord> {
 		let query = "";
-		const local: MinifiedSearchRecord[] | undefined = JSON.parse(window.localStorage.getItem(localStorageDataKey)) || undefined;
-
-		const bh = new Bloodhound({
-
-			datumTokenizer: (entry): string[] => {
+		return new Bloodhound<MinifiedSearchRecord>({
+			// See https://github.com/twitter/typeahead.js/blob/master/doc/bloodhound.md#options
+			prefetch: searchIndexUrl,
+			datumTokenizer: entry => {
 				return [entry.l, entry.p, entry.t].concat(entry.g).concat(entry.m);
 			},
-			queryTokenizer: (input: string) => {
+			queryTokenizer: input => {
 				query = input;
 				return [input];
 			},
 			identify: e => <any>e.t,
-			prefetch: {
-				url: searchIndexHeadUrl,
-				ttl: dataTimeout
-			},
 			sorter: (x, y) => {
 				// TODO: Include edit distance as additional weighting factor
 				// Direct matches should be ranked higher, else rank on basis of download count
@@ -125,11 +95,7 @@ function typeSearch(el: HTMLInputElement) {
 				else {
 					return y.d - x.d;
 				}
-			},
-			local
+			}
 		});
-
-		return bh;
 	}
-
 }
