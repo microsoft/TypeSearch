@@ -31,10 +31,8 @@ function typeSearch(el: HTMLInputElement) {
 		minLength: 0
 	};
 
-	const source = createDataSource();
-
 	const data = {
-		source,
+		source: createDataSource(),
 		displayKey: 't',
 		templates: {
 			suggestion: (obj: MinifiedSearchRecord) => {
@@ -47,10 +45,11 @@ function typeSearch(el: HTMLInputElement) {
 	};
 
 	jqueryEl.typeahead(opts, data);
-	jqueryEl.on('typeahead:select', (unused: {}, obj: MinifiedSearchRecord) => navigate(obj.t));
+	jqueryEl.on('typeahead:select', (unused: {}, obj: MinifiedSearchRecord) => navigate(obj));
 	jqueryEl.keyup(k => {
-		if(k.keyCode === 13) {
-			navigate(el.value);
+		if (k.keyCode === 13) { // Enter key
+			const selectables = jqueryEl.siblings(".tt-menu").find(".tt-selectable");
+			$(selectables[0]).trigger("click");
 		}
 	});
 
@@ -58,16 +57,12 @@ function typeSearch(el: HTMLInputElement) {
 		ai.trackEvent('focus');
 	});
 
-	function navigate(value: string) {
+	function navigate(record: MinifiedSearchRecord) {
 		if (ai) {
-			ai.trackEvent('navigate', { target: value });
+			ai.trackEvent('navigate', { target: record.t });
 		}
-		// Navigate only if the selected string is a valid package, else return.
-		const result = source.local.some((e: MinifiedSearchRecord) => e.t === value);
-		if (!result) {
-			return;
-		}
-		window.location.href = `https://www.npmjs.org/package/@types/${value}`;
+
+		window.location.href = `https://www.npmjs.org/package/@types/${record.t}`;
 	}
 
 	function createDataSource(): Bloodhound<MinifiedSearchRecord> {
