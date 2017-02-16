@@ -28,12 +28,9 @@ function copy(src: string, dest: string): NodeJS.ReadWriteStream {
 }
 
 gulp.task("static", () => copy("assets/static/**", out));
-gulp.task("lib", () =>
-    merge(...["jquery/dist/jquery.min.js", "typeahead.js/dist/typeahead.bundle.min.js"].map(src =>
-        copy(`node_modules/${src}`, outDir("lib")))));
 
 gulp.task("build", (cb: any) => {
-    runSequence("clean", ["script", "static", "lib"], cb);
+    runSequence("clean", ["script", "static"], cb);
 });
 
 gulp.task("serve", () => {
@@ -45,7 +42,6 @@ gulp.task("serve", () => {
 gulp.task("watch", ["build", "serve"], () => {
     gulp.watch("assets/script/**", ["script"]);
     gulp.watch("assets/static/**", ["static"]);
-    gulp.watch("node_modules", ["lib"]);
     gulp.watch("search-index-@(full|head|min).json", ["index"]);
 });
 
@@ -57,7 +53,7 @@ gulp.task("publish", ["build"], async () => {
     }
 
     if (!(exec("git status").includes("nothing to commit"))) {
-        throw new Error("Commit all changes first!")
+        throw new Error("Commit all changes first!");
     }
 
     if (exec("git rev-parse --abbrev-ref HEAD").trim() !== "master") {
@@ -70,7 +66,7 @@ gulp.task("publish", ["build"], async () => {
         return path.join(tmpObj.name, dir);
     }
 
-    const toMove = ["node_modules", "public"];
+    const toMove = ["public"];
     // Move files away temporarily.
     await Promise.all(toMove.map(dir => mvPromise(dir, tmpDir(dir))));
 
@@ -104,6 +100,6 @@ function mvPromise(src: string, dest: string): Promise<void> {
             else {
                 resolve();
             }
-        })
+        });
     });
 }
