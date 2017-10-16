@@ -20,7 +20,7 @@ gulp.task("script", () => {
     const tsProject = ts.createProject("assets/script/tsconfig.json", {
         typescript: require("typescript")
     });
-    return tsProject.src().pipe(ts(tsProject)).js.pipe(gulp.dest(outDir("script")));
+    return tsProject.src().pipe(ts(<ts.Params>tsProject)).js.pipe(gulp.dest(outDir("script")));
 });
 
 function copy(src: string, dest: string): NodeJS.ReadWriteStream {
@@ -38,8 +38,9 @@ gulp.task("build", (cb: any) => {
 
 gulp.task("serve", () => {
     const server = createServer({ root: "public" });
-    console.log("\nServing to localhost\n");
-    server.listen(80);
+    const port = Number(process.argv[4]) || 80;
+    console.log(`\nServing on http://localhost:${port}\n`);
+    server.listen(port);
 });
 
 gulp.task("watch", ["build", "serve"], () => {

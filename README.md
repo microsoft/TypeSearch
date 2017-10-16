@@ -1,11 +1,15 @@
-TODO: finish README
+A web-based search for `@types/*` packages.
 
-Online [here](http://microsoft.github.io/TypeSearch).
+When using TypeScript an easy way to install library *Type Definitions* is using "@types" npm packages.
+
+View the running site: [http://microsoft.github.io/TypeSearch](http://microsoft.github.io/TypeSearch).
 
 ### Run locally
-
-Run `gulp`, then see [localhost](http://localhost).
+```bash
+npm i
+npm run build
+gulp serve --port 8080
+```
 
 ### Publish
-
 `gulp publish`
