@@ -1,4 +1,3 @@
-var ai = window.appInsights;
 var searchIndexUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
 function typeSearch(el) {
     var jqueryEl = $(el);
@@ -23,13 +22,7 @@ function typeSearch(el) {
             $(selectables[0]).trigger("click");
         }
     });
-    jqueryEl.focus(function () {
-        ai.trackEvent('focus');
-    });
     function navigate(record) {
-        if (ai) {
-            ai.trackEvent('navigate', { target: record.t });
-        }
         window.location.href = "https://www.npmjs.org/package/@types/" + record.t;
     }
     function createDataSource() {
