@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile-gulpfile": "./node_modules/typescript/bin/tsc",
+    "compile-gulpfile": "tsc -p .",
     "build": "npm run compile-gulpfile && node node_modules/gulp/bin/gulp.js build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

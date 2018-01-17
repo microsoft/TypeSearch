@@ -1,8 +1,3 @@
-interface Window {
-	appInsights: any;
-}
-const ai = window.appInsights;
-
 const searchIndexUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
 
 interface MinifiedSearchRecord {
@@ -53,15 +48,7 @@ function typeSearch(el: HTMLInputElement) {
 		}
 	});
 
-	jqueryEl.focus(() => {
-		ai.trackEvent('focus');
-	});
-
 	function navigate(record: MinifiedSearchRecord) {
-		if (ai) {
-			ai.trackEvent('navigate', { target: record.t });
-		}
-
 		window.location.href = `https://www.npmjs.org/package/@types/${record.t}`;
 	}
 
