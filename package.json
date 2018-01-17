@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node node_modules/gulp/bin/gulp.js build",
+    "compile-gulpfile": "./node_modules/typescript/bin/tsc",
+    "build": "npm run compile-gulpfile && node node_modules/gulp/bin/gulp.js build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/es6-promise": "0.0.28",
     "@types/fs-extra": "0.0.28",
     "@types/tmp": "0.0.27",
-    "fs-extra": "^0.30.0",
+    "fs-extra": "0.30.0",
     "jquery": "^2.2.2",
     "tmp": "0.0.28",
     "typeahead.js": "^0.11.1"
