@@ -10,7 +10,7 @@ function typeSearch(el) {
         displayKey: 't',
         templates: {
             suggestion: function (obj) {
-                return "<div class=\"suggestion\">\n\t\t\t\t\t\t<span class=\"type-package-name\">" + obj.t + "</span>\n\t\t\t\t\t\t<span class=\"library-name\">" + obj.l + "</span>\n\t\t\t\t\t\t</div>";
+                return "\n\t\t\t\t\t<div class=\"suggestion\">\n\t\t\t\t\t\t<span class=\"type-package-name\">" + obj.t + "</span>\n\t\t\t\t\t\t<span class=\"library-name\">" + obj.l + "</span>\n\t\t\t\t\t</div>\n\t\t\t\t";
             }
         }
     };
@@ -44,12 +44,10 @@ function typeSearch(el) {
                 if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
                     return -1;
                 }
-                else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
+                if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
                     return 1;
                 }
-                else {
-                    return y.d - x.d;
-                }
+                return y.d - x.d;
             }
         });
     }
