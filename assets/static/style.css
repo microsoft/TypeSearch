@@ -1,25 +1,37 @@
 body {
-    font-family: wf_segoe-ui_normal,Verdana,Geneva,Tahoma,sans-serif;;
+    margin: 0;
+    text-align: center;
+    font-family: wf_segoe-ui_normal, Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 24px;
+    line-height: 1.4;
+    position: relative;
+    padding-top: 1em;
 }
 
-h1 {
+h1.headline {
     font-weight: 100;
+    margin-bottom: 1.4em;
+    color: #294E80;
 }
 
 span.bold {
-    font-weight: 500;
+    font-weight: 700;
+}
+
+#demo {
+    width: 20em;
 }
 
 div.suggestion {
     border: solid 1px gray;
+    border-radius: 8px;
     cursor: pointer;
+    background-color: #FFFFFF;
 }
 
-.twitter-typehead {
-    position: relative;
+.tt-hint, .tt-input, .tt-menu { 
+    width: 100%; 
 }
-
-.tt-hint, .tt-input, .tt-menu { width: 100%; }
 
 span.type-package-name {
     font-family: monospace;
@@ -47,9 +59,10 @@ span.library-name {
 .tt-dropdown-menu, .gist {
     text-align: left;
 }
+
 .typeahead, .tt-query, .tt-hint {
     border: 2px solid #CCCCCC;
-    border-radius: 8px 8px 8px 8px;
+    border-radius: 8px;
     font-size: 24px;
     height: 30px;
     line-height: 30px;
@@ -61,7 +74,7 @@ span.library-name {
     background-color: #FFFFFF;
 }
 .typeahead:focus {
-    border: 2px solid #0097CF;
+    border: 2px solid #294E80;
 }
 .tt-query {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
@@ -84,9 +97,22 @@ span.library-name {
     height: 24px;
 }
 .tt-suggestion.tt-cursor {
-    background-color: #0097CF;
+    background-color: #294E80;
     color: #FFFFFF;
 }
 .tt-suggestion p {
     margin: 0;
+}
+
+.footer {
+    font-size: 80%;
+    position: fixed;
+    bottom: 12px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+}
+
+.footer a, .footer a:visited {
+    color: #294E80;
 }

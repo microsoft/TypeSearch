@@ -31,10 +31,12 @@ function typeSearch(el: HTMLInputElement) {
 		displayKey: 't',
 		templates: {
 			suggestion: (obj: MinifiedSearchRecord) => {
-				return `<div class="suggestion">
+				return `
+					<div class="suggestion">
 						<span class="type-package-name">${obj.t}</span>
 						<span class="library-name">${obj.l}</span>
-						</div>`
+					</div>
+				`;
 			}
 		}
 	};
@@ -57,7 +59,7 @@ function typeSearch(el: HTMLInputElement) {
 		return new Bloodhound<MinifiedSearchRecord>({
 			// See https://github.com/twitter/typeahead.js/blob/master/doc/bloodhound.md#options
 			prefetch: searchIndexUrl,
-			datumTokenizer: entry => {
+			datumTokenizer: (entry: MinifiedSearchRecord) => {
 				return [entry.l, entry.p, entry.t].concat(entry.g).concat(entry.m);
 			},
 			queryTokenizer: input => {
@@ -71,12 +73,12 @@ function typeSearch(el: HTMLInputElement) {
 				if (x.t === query || x.t === (query + "js") || x.t === (query + ".js") || x.t === (query + "-js")) {
 					return -1;
 				}
-				else if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
+
+				if (y.t === query || y.t === (query + "js") || y.t === (query + ".js") || y.t === (query + "-js")) {
 					return 1;
 				}
-				else {
-					return y.d - x.d;
-				}
+				
+				return y.d - x.d;
 			}
 		});
 	}
