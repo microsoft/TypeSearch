@@ -15,7 +15,7 @@
     "@types/fs-extra": "0.0.28",
     "@types/tmp": "0.0.27",
     "fs-extra": "0.30.0",
-    "jquery": "^3.3.1",
+    "jquery": "^3.5.0",
     "tmp": "0.0.28",
     "typeahead.js": "^0.11.1"
   },
