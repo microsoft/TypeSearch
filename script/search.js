@@ -1,6 +1,5 @@
 var searchIndexUrl = "https://typespublisher.blob.core.windows.net/typespublisher/data/search-index-min.json";
-function typeSearch(el) {
-    var jqueryEl = $(el);
+function typeSearch(jqueryEl, search) {
     var opts = {
         highlight: true,
         minLength: 0
@@ -17,13 +16,27 @@ function typeSearch(el) {
     jqueryEl.typeahead(opts, data);
     jqueryEl.on('typeahead:select', function (unused, obj) { return navigate(obj); });
     jqueryEl.keyup(function (k) {
-        if (k.keyCode === 13) {
+        if (k.keyCode === 13) { // Enter key
             var selectables = jqueryEl.siblings(".tt-menu").find(".tt-selectable");
             $(selectables[0]).trigger("click");
         }
+        else {
+            updateSearch(jqueryEl.val());
+        }
     });
+    if (search) {
+        jqueryEl.typeahead('val', search).typeahead('open');
+    }
     function navigate(record) {
         window.location.href = "https://www.npmjs.org/package/@types/" + record.t;
+    }
+    function updateSearch(newValue) {
+        if (!URLSearchParams) {
+            return;
+        }
+        var params = new URLSearchParams(window.location.search);
+        params.set('search', newValue);
+        history.pushState(null, '', window.location.pathname + "?" + params);
     }
     function createDataSource() {
         var query = "";
@@ -52,3 +65,16 @@ function typeSearch(el) {
         });
     }
 }
+$(function () {
+    var params = window.location.search
+        .substring(1)
+        .split('&')
+        .reduce(function (params, pair) {
+        var _a = pair.split('='), key = _a[0], value = _a[1];
+        params[key] = value;
+        return params;
+    }, {});
+    var jqueryEl = $("#demo");
+    typeSearch(jqueryEl, params.search);
+    jqueryEl.focus();
+});
