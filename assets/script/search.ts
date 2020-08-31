@@ -19,8 +19,7 @@ interface Bloodhound<T> {
 	local: T[];
 }
 
-function typeSearch(el: HTMLInputElement) {
-	const jqueryEl = $(el);
+function typeSearch(jqueryEl: JQuery, search?: string) {
 	const opts: Twitter.Typeahead.Options = {
 		highlight: true,
 		minLength: 0
@@ -47,11 +46,28 @@ function typeSearch(el: HTMLInputElement) {
 		if (k.keyCode === 13) { // Enter key
 			const selectables = jqueryEl.siblings(".tt-menu").find(".tt-selectable");
 			$(selectables[0]).trigger("click");
+		} else {
+			updateSearch(jqueryEl.val());
 		}
 	});
 
+	if (search) {
+		jqueryEl.typeahead('val', search).typeahead('open');
+	}
+
 	function navigate(record: MinifiedSearchRecord) {
 		window.location.href = `https://www.npmjs.org/package/@types/${record.t}`;
+	}
+
+	function updateSearch(newValue: string) {
+		if (!URLSearchParams) {
+			return;
+		}
+
+		const params = new URLSearchParams(window.location.search);
+		params.set('search', newValue);
+
+		history.pushState(null, '', `${window.location.pathname}?${params}`);
 	}
 
 	function createDataSource(): Bloodhound<MinifiedSearchRecord> {
@@ -83,3 +99,18 @@ function typeSearch(el: HTMLInputElement) {
 		});
 	}
 }
+
+$(() => {
+	const params = window.location.search
+		.substring(1)
+		.split('&')
+		.reduce<Record<string, string>>((params, pair) => {
+			const [key, value] = pair.split('=');
+			params[key] = value;
+			return params;
+		}, {});
+	const jqueryEl = $("#demo");
+
+	typeSearch(jqueryEl, params.search);
+	jqueryEl.focus();
+});
